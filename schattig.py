@@ -114,8 +114,5 @@ if __name__ == '__main__':
 		else:
 			parse.print_help()
 			parse.error('an option must be specified')
-	except ValueError as e:
+	except Exception as e:
 		print(e)
-	except IndexError as a:
-		print('missing month value')
-		parse.print_help();
