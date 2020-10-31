@@ -47,6 +47,8 @@ def compute_monthly_total():
 		month = stat[-14:-12]
 		read = pd.read_csv(file)
 		payments[month].extend(read['Total'].values)
+		if(payments[month] == None):
+			payments[month].extend(read['Totaal'].values)
 
 def print_summary_month(index):
 	#print(payments[index])
