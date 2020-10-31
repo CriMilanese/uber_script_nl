@@ -46,8 +46,9 @@ def compute_monthly_total():
 		file = str('../pay_statements/'+stat)
 		month = stat[-14:-12]
 		read = pd.read_csv(file)
-		payments[month].extend(read['Total'].values)
-		if(payments[month] == None):
+		try:
+			payments[month].extend(read['Total'].values)
+		except KeyError as e:
 			payments[month].extend(read['Totaal'].values)
 
 def print_summary_month(index):
