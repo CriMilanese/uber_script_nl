@@ -3,6 +3,7 @@
 import pandas as pd
 from os import listdir
 from optparse import OptionParser
+from unit_test.validation import Validator
 
 payments = {
 		"01" : [],
@@ -54,13 +55,13 @@ def compute_monthly_total():
 def print_summary_month(index):
 	#print(payments[index])
 	print('Following is the total of all payments occurred in '+months[index])
-	print('namely the sum, delivered to your Uber account, of each delivery')
+	print('namely the sum, transferred to your Uber account, of all deliveries')
 	print('TIPS ARE NOT INCLUDED')
 	tmp = []
 	for x in payments[index]:
 		tmp.append(float(x[1:]))
 	total = sum(tmp)
-	print('\tomzet is: '+str(total)+' euro')
+	print('\tomzet is: '+str('%.2f' % total)+' euro')
 	print('\tof which 21% are taxes (omzetbelasting): '+str('%.2f' % (total/100*21))+ ' euro')
 	print('\tnetto: '+str('%.2f' % (total - total/100*21))+' euro')
 
@@ -77,27 +78,28 @@ def print_summary_quarter(index):
 		for x in payments[month]:
 			tmp.append(float(x[1:]))
 	total = sum(tmp)
-	print('\tomzet is: '+str(total)+' euro')
+	print('\tomzet is: '+str('%.2f' % total)+' euro')
 	print('\tof which 21% are taxes (omzetbelasting): '+str('%.2f' % (total/100*21))+ ' euro')
 	print('\tnetto: '+str('%.2f' % (total - total/100*21))+' euro')
 
 def print_summary_year(index):
 	#print(payments[index])
 	print('Following is the total of all payments occurred in '+index)
-	print('namely the sum of money delivered to your Uber account for each delivery during this period')
+	print('namely the sum of money transferred to your Uber account \n for each delivery during this period')
 	print('TIPS ARE NOT INCLUDED')
 	tmp = []
 	for x in payments.keys():
 		for y in payments[x]:
 			tmp.append(float(y[1:]))
 	total = sum(tmp)
-	print('\tomzet is: '+str(total)+' euro')
+	print('\tomzet is: '+str('%.2f' % total)+' euro')
 	print('\tof which 21% are taxes (omzetbelasting): '+str('%.2f' % (total/100*21))+ ' euro')
 	print('\tnetto: '+str('%.2f' % (total - total/100*21))+' euro')
 
 
 if __name__ == '__main__':
 	try:
+		check = Validator()
 		parse = OptionParser()
 		parse.add_option("-m", "--month", dest="month",
                   help="specify a month as a value between 1 and 12")
@@ -107,17 +109,17 @@ if __name__ == '__main__':
                   help="specify a quarter as a number from 1 to 4")
 		(options, args) = parse.parse_args()
 		if options.month:
-			month = options.month
-			if(len(month)==1):
-				month = str(0)+month
-			if(int(month) in range(1,13)):
+			if(check.month_is_valid(options.month)):
 				compute_monthly_total()
-				print_summary_month(month)
+				print_summary_month(options.month)
 			else:
 				raise ValueError('month value is invalid')
 		elif options.quarter:
-			compute_monthly_total()
-			print_summary_quarter(options.quarter)
+			if(check.quarter_is_valid(options.quarter)):
+				compute_monthly_total()
+				print_summary_quarter(options.quarter)
+			else:
+				raise ValueError('incorrect quarter value')
 		elif options.year:
 			compute_monthly_total()
 			print_summary_year(options.year)
@@ -126,3 +128,4 @@ if __name__ == '__main__':
 			parse.print_help()
 	except Exception as e:
 		print(e)
+		parse.print_help()
