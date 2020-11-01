@@ -46,9 +46,9 @@ def compute_monthly_total():
 		file = str('../pay_statements/'+stat)
 		month = stat[-14:-12]
 		read = pd.read_csv(file)
-		try:
+		if not read.get('Total').empty:
 			payments[month].extend(read['Total'].values)
-		except KeyError as e:
+		elif read.get('Totaal').empty:
 			payments[month].extend(read['Totaal'].values)
 
 def print_summary_month(index):
@@ -99,15 +99,21 @@ if __name__ == '__main__':
 	try:
 		parse = OptionParser()
 		parse.add_option("-m", "--month", dest="month",
-                  help="specify a month as a 2 digit value")
+                  help="specify a month as a value between 1 and 12")
 		parse.add_option("-y", "--year", dest="year",
                   help="specify an year as a 4 digit value")
 		parse.add_option("-q", "--quarter", dest="quarter",
                   help="specify a quarter as a number from 1 to 4")
 		(options, args) = parse.parse_args()
 		if options.month:
-			compute_monthly_total()
-			print_summary_month(options.month)
+			month = options.month
+			if(len(month)==1):
+				month = str(0)+month
+			if(int(month) in range(1,13)):
+				compute_monthly_total()
+				print_summary_month(month)
+			else:
+				raise ValueError('month value is invalid')
 		elif options.quarter:
 			compute_monthly_total()
 			print_summary_quarter(options.quarter)
@@ -115,7 +121,7 @@ if __name__ == '__main__':
 			compute_monthly_total()
 			print_summary_year(options.year)
 		else:
+			parse.error('an option error occurred')
 			parse.print_help()
-			parse.error('an option must be specified')
 	except Exception as e:
 		print(e)
