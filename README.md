@@ -1,6 +1,8 @@
 # uber_script_nl
 ### Python script that automates the process of calculating taxes and revenues of UberEats drivers in the Netherlands
 
+####(It does work with both Dutch and English statements)
+
 Dependencies:
   python3 -- to run the script (download from [here]{https://www.python.org/downloads/}
     pandas -- to read csv files (install using pip)
@@ -21,11 +23,13 @@ Dependencies:
   5. move those files into "pay statement" local folder
   6. run the script from the terminal as in the following example:
 
-      > for Windows users
-      `~$ chdir Uber; chdir script; python3 tellen.py -m` YOUR_MONTH_NUMBER
+  > for Windows users
 
-      > for Linux and Mac users
-      `~$ cd Uber; cd script; python3 tellen.py -m YOUR_MONTH_NUMBER`
+  `~$ chdir Uber; chdir script; python3 tellen.py -m YOUR_MONTH_NUMBER`
+
+  > for Linux and Mac users
+
+  `~$ cd Uber; cd script; python3 tellen.py -m YOUR_MONTH_NUMBER`
 
 ### other options
 
@@ -37,3 +41,5 @@ Dependencies:
       to use on its own, with a value between 1 and 4, prints the last available quarter of that index starting from January
 
 ### extra info
+
+  none of these features send any information outside your computer.
