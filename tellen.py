@@ -4,6 +4,9 @@ import pandas as pd
 from os import listdir
 from optparse import OptionParser
 from unit_test.validation import Validator
+from datetime import datetime
+
+this_year = datetime.now().strftime("%Y")
 
 string_format = {
     "01": "January",
@@ -20,27 +23,12 @@ string_format = {
     "12": "December"
 }
 
-months = {
-    "01": [],
-    "02": [],
-    "03": [],
-    "04": [],
-    "05": [],
-    "06": [],
-    "07": [],
-    "08": [],
-    "09": [],
-    "10": [],
-    "11": [],
-    "12": []
-}
-
 payments = {
-    "2019" : months,
-    "2020" : months,
-    "2021" : months,
-    "2022" : months,
-    "2023" : months
+    "2019" : {},
+    "2020" : {},
+    "2021" : {},
+    "2022" : {},
+    "2023" : {}
 }
 
 quarters = {
@@ -50,15 +38,29 @@ quarters = {
     "4": ["10", "11", "12"]
 }
 
+def init_dict():
+    for year in payments:
+        payments[year] = {
+            "01": [],
+            "02": [],
+            "03": [],
+            "04": [],
+            "05": [],
+            "06": [],
+            "07": [],
+            "08": [],
+            "09": [],
+            "10": [],
+            "11": [],
+            "12": []
+        }
+
 
 def compute_monthly_total():
-    count_of_files = 0;
     for stat in listdir('../pay_statements'):
         file = str('../pay_statements/' + stat)
         month = stat[-14:-12]
         year = stat[-8:-4]
-        # print("statement number: "+str(count_of_files))
-        count_of_files += 1
         read = pd.read_csv(file)
         if(read.get('Total') is not None):
             payments[year][month].extend(read['Total'].values)
@@ -68,15 +70,15 @@ def compute_monthly_total():
             raise KeyError('column name not found')
 
 
-def print_summary_month(index, year = '2021'):
+def print_summary_month(index, year = this_year):
     # print(string_format[index])
-    year_string = year if year != '2021' else "this year"
+    year_string = year if year != this_year else "this year"
     print('Following is the total of all payments occurred in ' +
           string_format[index] + " of "+year_string)
     print('namely the sum, transferred to your Uber account, of all deliveries')
     print('TIPS ARE NOT INCLUDED')
     tmp = []
-    for x in payments[index]:
+    for x in payments[year][index]:
         tmp.append(float(x[1:]))
     total = sum(tmp)
     print('\tomzet is: ' + str('%.2f' % total) + ' euro')
@@ -85,8 +87,8 @@ def print_summary_month(index, year = '2021'):
     print('\tnetto: ' + str('%.2f' % (total - total / 100 * 21)) + ' euro')
 
 
-def print_summary_quarter(index, year = '2021'):
-    year_string = year if year != '2021' else "this year"
+def print_summary_quarter(index, year = this_year):
+    year_string = year if year != this_year else "this year"
     print('Following is the total of all payments, occurred in quarter ' + index
           + ', namely for the months of ' + string_format[quarters[index][0]] + ", "
           + string_format[quarters[index][1]] + " and "
@@ -95,7 +97,7 @@ def print_summary_quarter(index, year = '2021'):
     print('TIPS ARE NOT INCLUDED')
     tmp = []
     for month in quarters[index]:
-        for x in string_format[month]:
+        for x in payments[year][month]:
             tmp.append(float(x[1:]))
     total = sum(tmp)
     print('\tomzet is: ' + str('%.2f' % total) + ' euro')
@@ -104,8 +106,8 @@ def print_summary_quarter(index, year = '2021'):
     print('\tnetto: ' + str('%.2f' % (total - total / 100 * 21)) + ' euro')
 
 
-def print_summary_year(index, year = '2021'):
-    year_string = year if year != '2021' else "this year"
+def print_summary_year(index, year = this_year):
+    year_string = year if year != this_year else "this year"
     print('Following is the total of all payments occurred in ' + index)
     print('namely the sum of money transferred to your Uber account \n for each delivery during this period')
     print('TIPS ARE NOT INCLUDED')
@@ -122,6 +124,7 @@ def print_summary_year(index, year = '2021'):
 
 if __name__ == '__main__':
     try:
+        init_dict()
         check = Validator()
         parse = OptionParser()
         parse.add_option("-m", "--month", dest="month",
@@ -134,22 +137,22 @@ if __name__ == '__main__':
         if options.month:
             if(check.month_is_valid(options.month)):
                 compute_monthly_total()
-                print_summary_month(options.month, option.year) if option.year else print_summary_month(options.month)
+                print_summary_month(options.month, options.year) if options.year else print_summary_month(options.month)
             else:
                 raise ValueError('month value is invalid')
         elif options.quarter:
-            if(option.month):
+            if(options.month):
                 raise ValueError("months are already specified")
             if(check.quarter_is_valid(options.quarter)):
                 compute_monthly_total()
-                print_summary_quarter(options.quarter, option.year) if option.year else print_summary_quarter(options.quarter)
+                print_summary_quarter(options.quarter, options.year) if options.year else print_summary_quarter(options.quarter)
             else:
                 raise ValueError('incorrect quarter value')
         elif options.year:
             compute_monthly_total()
             print_summary_year(options.year)
         else:
-            parse.error('an option error occurred')
+            parse.error('an options error occurred')
             parse.print_help()
     except KeyError as e:
         print("You need to use two digits, so if you need month 8 then you type \"-m 08\"")
