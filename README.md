@@ -21,21 +21,26 @@ Dependencies:
   3. login to [uber driver]{driver.uber.com} and under the "payment statements" tab select the "statements" section
   4. download all statements for the selected months
   5. move those files into "pay statement" local folder
-  6. run the script from the terminal as in the following example:
+  6. open a terminal and navigate into the script folder:
+  7. run the script from the terminal as in the following example:
 
   > for Windows users
 
-  `~$ chdir Uber; chdir script; python3 tellen.py -m YOUR_MONTH_NUMBER`
+  `~$ chdir Uber`
+  `~$ chdir script`
+  `~$ python3 tellen.py -m YOUR_TWO DIGITS_MONTH_NUMBER`
 
   > for Linux and Mac users
 
-  `~$ cd Uber; cd script; python3 tellen.py -m YOUR_MONTH_NUMBER`
+  `~$ cd Uber`
+  `~$ cd script`
+  `~$ python3 tellen.py -m YOUR_TWO_DIGITS_MONTH_NUMBER`
 
 ### other options
 
-`-y YEAR` :
+`-y [YEAR]` :
 
-yearly summary, if not used the current is implied. When a month is specified with it, then it will return its info as you would expect
+yearly summary, if not used the last 12 months would be taken into account, if used with a value . When a month is specified with it, then it will return its info as you would expect
 
 `-q QUARTER` :
 

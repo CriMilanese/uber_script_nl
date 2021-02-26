@@ -44,9 +44,12 @@ quarters = {
 
 
 def compute_monthly_total():
+    count_of_files = 0;
     for stat in listdir('../pay_statements'):
         file = str('../pay_statements/' + stat)
         month = stat[-14:-12]
+        print("statement number: "+str(count_of_files))
+        count_of_files += 1
         read = pd.read_csv(file)
         if(read.get('Total') is not None):
             payments[month].extend(read['Total'].values)
@@ -57,7 +60,7 @@ def compute_monthly_total():
 
 
 def print_summary_month(index):
-    # print(payments[index])
+    print(payments[index])
     print('Following is the total of all payments occurred in ' +
           months[index])
     print('namely the sum, transferred to your Uber account, of all deliveries')
@@ -73,7 +76,6 @@ def print_summary_month(index):
 
 
 def print_summary_quarter(index):
-    # print(payments[index])
     print('Following is the total of all payments occurred in quarter ' + index
           + ', namely for the months of ' + months[quarters[index][0]] + ", "
           + months[quarters[index][1]] + " and "
@@ -92,7 +94,6 @@ def print_summary_quarter(index):
 
 
 def print_summary_year(index):
-    # print(payments[index])
     print('Following is the total of all payments occurred in ' + index)
     print('namely the sum of money transferred to your Uber account \n for each delivery during this period')
     print('TIPS ARE NOT INCLUDED')
@@ -121,12 +122,14 @@ if __name__ == '__main__':
         if options.month:
             if(check.month_is_valid(options.month)):
                 compute_monthly_total()
+                print("calculating month");
                 print_summary_month(options.month)
             else:
                 raise ValueError('month value is invalid')
         elif options.quarter:
             if(check.quarter_is_valid(options.quarter)):
                 compute_monthly_total()
+                print("calculating quarter");
                 print_summary_quarter(options.quarter)
             else:
                 raise ValueError('incorrect quarter value')
@@ -136,6 +139,8 @@ if __name__ == '__main__':
         else:
             parse.error('an option error occurred')
             parse.print_help()
+    except KeyError as e:
+        print("You need to use two digits, so if you need month 8 then you type \"-m 08\"")
     except Exception as e:
         print(e)
         parse.print_help()

@@ -8,6 +8,6 @@ class Validator():
         return True
 
     def quarter_is_valid(self, quarter):
-        if(int(quarter) in range(1, 4)):
+        if(int(quarter) in range(1, 5)):
             return True
         return False
