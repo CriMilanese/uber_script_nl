@@ -4,6 +4,7 @@
 Dependencies:
   python3 -- to run the script (download from [here]{https://www.python.org/downloads/}
     pandas -- to read csv files (install using pip)
+    	`pip3 install pandas`
 
 ### usage:
 
