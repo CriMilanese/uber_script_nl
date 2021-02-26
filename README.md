@@ -22,7 +22,18 @@ Dependencies:
   6. run the script from the terminal as in the following example:
 
       > for Windows users
-      ~$ chdir Uber; chdir script; python3 tellen.py -m MONTH_NUMBER
+      `~$ chdir Uber; chdir script; python3 tellen.py -m` YOUR_MONTH_NUMBER
 
       > for Linux and Mac users
-      ~$ cd Uber; cd script; python3 tellen.py -m MONTH_NUMBER
+      `~$ cd Uber; cd script; python3 tellen.py -m YOUR_MONTH_NUMBER`
+
+### other options
+
+  `-y YEAR` :
+      yearly summary, if not used the current is implied.
+      When a month is specified with it, then it will return its info as you would expect
+
+  `-q QUARTER` :
+      to use on its own, with a value between 1 and 4, prints the last available quarter of that index starting from January
+
+### extra info
