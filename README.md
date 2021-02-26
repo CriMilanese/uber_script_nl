@@ -36,15 +36,18 @@ Dependencies:
   `~$ cd script`
   `~$ python3 tellen.py -m YOUR_TWO_DIGITS_MONTH_NUMBER`
 
-### other options
+### all options
+`-m [0-1]+[0-9]+` :
+
+monthly summary, your value must be a two digit number from 01 to 12. When a year is specified, it will return its info as you would expect. You can add an year to be more specific
 
 `-y [YEAR]` :
 
-yearly summary, if not used the last 12 months would be taken into account, if used with a value . When a month is specified with it, then it will return its info as you would expect
+yearly summary, if no value is specified the current would be taken into account, if used with a value then does what expected. When a month is specified before it, then it will return the info of the month of that year.
 
 `-q QUARTER` :
 
-to use on its own, with a value between 1 and 4, prints the last available quarter of that index starting from January
+to use on its own, it has to have a single-digit value between 1 and 4, prints the last available quarter of that index starting from January. You can be more specific by adding the year flag if you prefer
 
 ### extra info
 
